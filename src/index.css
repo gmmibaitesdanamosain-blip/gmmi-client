@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* Custom colors for GMMI */
+@theme {
+  --color-gmmi-navy: #1e3a8a;
+  --color-gmmi-gold: #d4af37;
+}

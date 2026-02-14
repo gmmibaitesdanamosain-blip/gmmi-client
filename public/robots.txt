@@ -1,0 +1,49 @@
+User-agent: *
+# Allow crawling of all public content
+Allow: /
+
+# Standard SEO rules
+Allow: /sitemap.xml
+Allow: /robots.txt
+
+# Block sensitive administrative paths
+Disallow: /admin/
+Disallow: /super-admin/
+Disallow: /wp-admin/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /account/
+
+# Block system directories & source files
+Disallow: /api/
+Disallow: /cgi-bin/
+Disallow: /src/
+Disallow: /includes/
+Disallow: /logs/
+Disallow: /tmp/
+Disallow: /vendor/
+Disallow: /config/
+Disallow: /storage/
+Disallow: /assets/private/
+Disallow: /.git/
+Disallow: /.env
+Disallow: /node_modules/
+Disallow: /package.json
+Disallow: /package-lock.json
+
+# Block direct file access to certain extensions
+Disallow: /*.sql$
+Disallow: /*.log$
+Disallow: /*.bak$
+Disallow: /*.ini$
+Disallow: /*.sh$
+Disallow: /*.env$
+
+# Clean-param for dynamic URLs (if applicable)
+# Clean-param: sid&sort /forum/viewforum.php
+
+# Sitemap location
+Sitemap: https://gmmipusat.org/sitemap.xml
+Host: https://gmmipusat.org
