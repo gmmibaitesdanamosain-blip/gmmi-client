@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+@theme {
+  --color-gmmi-navy: #0f172a; /* Slate-900 */
+  --color-gmmi-gold: #d4af37; /* Gold */
+  
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  
+  --radius-gmmi: 2.5rem;
+}
+
+/* Global Styles for Premium Feel */
+body {
+  font-family: var(--font-sans);
+  color: var(--color-gmmi-navy);
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* Hard Rules Implementation via CSS Utilities if needed, 
+   but we'll prioritize Tailwind classes in components as requested. */
+
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-morphism-dark {
+  background: rgba(15, 23, 42, 0.7); /* gmmi-navy-70 */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}

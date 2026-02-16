@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import AuthLayout from '../../layouts/AuthLayout';
-import { useAuth } from '../../hooks/useAuth';
 import {
-  Input,
+  Box,
+  Typography,
+  TextField,
   Button,
-  Checkbox,
-  Alert
-} from "@heroui/react";
+  IconButton,
+  InputAdornment,
+  Paper,
+  Alert,
+  Collapse
+} from '@mui/material';
 import {
   Mail,
   Lock,
@@ -18,12 +21,16 @@ import {
   CloudSun
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import AuthLayout from '../../layouts/AuthLayout';
+import { useAuth } from '../../hooks/useAuth';
+
+const NAVY = '#2f3d5f';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isVisible, setIsVisible] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [greeting, setGreeting] = useState('');
   const [greetingIcon, setGreetingIcon] = useState<React.ReactNode>(null);
@@ -33,22 +40,22 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     const hour = new Date().getHours();
-    if (hour < 11) {
+    if (hour >= 0 && hour < 11) {
       setGreeting('Selamat Pagi');
-      setGreetingIcon(<Sun className="w-6 h-6 text-amber-400 animate-spin-slow" />);
-    } else if (hour < 15) {
+      setGreetingIcon(<Sun size={24} style={{ color: '#fbbf24' }} />);
+    } else if (hour >= 11 && hour < 15) {
       setGreeting('Selamat Siang');
-      setGreetingIcon(<CloudSun className="w-6 h-6 text-orange-400" />);
-    } else if (hour < 18) {
+      setGreetingIcon(<CloudSun size={24} style={{ color: '#f59e0b' }} />);
+    } else if (hour >= 15 && hour < 18) {
       setGreeting('Selamat Sore');
-      setGreetingIcon(<CloudSun className="w-6 h-6 text-orange-300" />);
+      setGreetingIcon(<CloudSun size={24} style={{ color: '#d97706' }} />);
     } else {
       setGreeting('Selamat Malam');
-      setGreetingIcon(<Moon className="w-6 h-6 text-indigo-400 animate-pulse" />);
+      setGreetingIcon(<Moon size={24} style={{ color: '#818cf8' }} />);
     }
   }, []);
 
-  const toggleVisibility = () => setIsVisible(!isVisible);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,11 +72,9 @@ const Login: React.FC = () => {
     }
   };
 
-  // Use useEffect to navigate when user state changes
   useEffect(() => {
     if (auth.isAuthenticated && auth.user) {
       const role = auth.user.role;
-      // Normalize role checking to handle variations
       if (['super_admin', 'superadmin', 'Super Admin'].includes(role)) {
         navigate('/super-admin/dashboard');
       } else if (['admin', 'admin_majelis', 'Admin Majelis'].includes(role)) {
@@ -82,133 +87,202 @@ const Login: React.FC = () => {
 
   return (
     <AuthLayout>
-      <motion.div
+      <Box
+        component={motion.div}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="w-full max-w-[420px] mx-auto"
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        sx={{
+          width: '100%',
+          maxWidth: '420px',
+          mx: 'auto'
+        }}
       >
-        <div className="bg-white rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-slate-100 overflow-hidden">
-          <div className="p-8 md:p-10">
-            {/* Minimalist Header */}
-            <header className="text-center mb-8">
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.1 }}
-                className="inline-flex items-center justify-center p-3 bg-slate-50 rounded-2xl mb-6"
-              >
-                {greetingIcon}
-              </motion.div>
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight mb-2">
-                {greeting}
-              </h1>
-              <p className="text-slate-500 text-xs font-semibold uppercase tracking-widest">
-                Portalis Kepegawaian
-              </p>
-            </header>
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 4, md: 5 },
+            borderRadius: '2rem',
+            border: '1px solid #f1f5f9',
+            boxShadow: '0 20px 50px rgba(0,0,0,0.05)',
+            bgcolor: 'background.paper',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}
+        >
+          {/* Header Section */}
+          <Box sx={{ textAlign: 'center', mb: 4, width: '100%' }}>
+            <Box
+              sx={{
+                display: 'inline-flex',
+                p: 2,
+                bgcolor: '#f8fafc',
+                borderRadius: '1.25rem',
+                mb: 3
+              }}
+            >
+              {greetingIcon}
+            </Box>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 800,
+                color: '#1e293b',
+                fontFamily: '"Poppins", sans-serif',
+                mb: 1
+              }}
+            >
+              {greeting}
+            </Typography>
+            <Typography
+              variant="caption"
+              sx={{
+                color: '#64748b',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.2em'
+              }}
+            >
+              Sistem Portal GMMI
+            </Typography>
+          </Box>
 
-            <AnimatePresence mode="wait">
+          {/* Error Message */}
+          <Box sx={{ width: '100%', mb: 3 }}>
+            <AnimatePresence>
               {error && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  className="mb-6"
-                >
-                  <Alert
-                    color="danger"
-                    variant="flat"
-                    className="rounded-xl"
-                    description={error}
-                  />
-                </motion.div>
+                <Collapse in={!!error}>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                  >
+                    <Alert
+                      severity="error"
+                      variant="filled"
+                      sx={{
+                        borderRadius: '1rem',
+                        bgcolor: '#fecaca',
+                        color: '#991b1b',
+                        fontWeight: 600,
+                        '& .MuiAlert-icon': { color: '#991b1b' }
+                      }}
+                    >
+                      {error}
+                    </Alert>
+                  </motion.div>
+                </Collapse>
               )}
             </AnimatePresence>
+          </Box>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-2">
-                <Input
-                  type="email"
-                  label="Email Kepegawaian"
-                  placeholder="admin@gmmi.org"
-                  labelPlacement="outside"
-                  variant="bordered"
-                  size="lg"
-                  radius="lg"
-                  startContent={<Mail className="text-slate-400 w-4 h-4" />}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  isRequired
-                  classNames={{
-                    label: "text-slate-600 font-semibold text-xs",
-                    inputWrapper: "border-slate-200 hover:border-slate-300 focus-within:!border-gmmi-navy shadow-none h-12 transition-colors",
-                    input: "text-sm"
-                  }}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Input
-                  label="Kode Akses"
-                  placeholder="••••••••"
-                  labelPlacement="outside"
-                  variant="bordered"
-                  size="lg"
-                  radius="lg"
-                  startContent={<Lock className="text-slate-400 w-4 h-4" />}
-                  endContent={
-                    <button className="focus:outline-none text-slate-400 hover:text-slate-600 transition-colors" type="button" onClick={toggleVisibility}>
-                      {isVisible ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
+          {/* Form Section */}
+          <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+              <TextField
+                fullWidth
+                label="Email"
+                variant="outlined"
+                placeholder="admin@gmmi.org"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Mail size={18} color="#94a3b8" />
+                    </InputAdornment>
+                  ),
+                  sx: {
+                    borderRadius: '12px',
+                    '& fieldset': { borderColor: '#e2e8f0' },
+                    '&:hover fieldset': { borderColor: '#cbd5e1 !important' },
+                    '&.Mui-focused fieldset': { borderColor: `${NAVY} !important` }
                   }
-                  type={isVisible ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  isRequired
-                  classNames={{
-                    label: "text-slate-600 font-semibold text-xs",
-                    inputWrapper: "border-slate-200 hover:border-slate-300 focus-within:!border-gmmi-navy shadow-none h-12 transition-colors",
-                    input: "text-sm"
-                  }}
-                />
-              </div>
+                }}
+              />
 
-              <div className="flex justify-between items-center pt-1">
-                <Checkbox
-                  size="sm"
-                  radius="sm"
-                  classNames={{
-                    label: "text-slate-500 text-xs font-medium",
-                  }}
-                >
-                  Ingat saya
-                </Checkbox>
-                <Link to="/forgot-password" className="text-xs font-semibold text-gmmi-navy hover:underline">
-                  Lupa password?
-                </Link>
-              </div>
+              <TextField
+                fullWidth
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                variant="outlined"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Lock size={18} color="#94a3b8" />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                        sx={{ color: '#94a3b8' }}
+                      >
+                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                  sx: {
+                    borderRadius: '12px',
+                    '& fieldset': { borderColor: '#e2e8f0' },
+                    '&:hover fieldset': { borderColor: '#cbd5e1 !important' },
+                    '&.Mui-focused fieldset': { borderColor: `${NAVY} !important` }
+                  }
+                }}
+              />
 
               <Button
                 type="submit"
-                size="lg"
-                radius="lg"
-                color="primary"
-                className="w-full bg-gmmi-navy text-white font-bold h-12 mt-4 shadow-lg shadow-gmmi-navy/20 hover:shadow-xl hover:shadow-gmmi-navy/30 transition-all"
-                isLoading={isLoading}
+                fullWidth
+                size="large"
+                variant="contained"
+                disabled={isLoading}
+                sx={{
+                  bgcolor: NAVY,
+                  color: 'white',
+                  fontWeight: 800,
+                  height: '56px',
+                  borderRadius: '12px',
+                  mt: 2,
+                  textTransform: 'none',
+                  fontSize: '1rem',
+                  boxShadow: '0 10px 20px rgba(47, 61, 95, 0.2)',
+                  '&:hover': {
+                    bgcolor: '#1e2947',
+                    boxShadow: '0 15px 30px rgba(47, 61, 95, 0.3)',
+                    transform: 'translateY(-2px)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
               >
-                Masuk ke Sistem
+                {isLoading ? 'Sedang Masuk...' : 'Masuk ke Sistem Portal'}
               </Button>
-            </form>
+            </Box>
+          </Box>
 
-            <div className="mt-8 pt-6 border-t border-slate-50 flex justify-center">
-              <span className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">
-                GMMI Core Engine v3.4.2
-              </span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
+          {/* Footer Section */}
+          <Box sx={{ mt: 5, borderTop: '1px solid #f8fafc', pt: 3, width: '100%', textAlign: 'center' }}>
+            <Typography
+              variant="caption"
+              sx={{
+                color: '#cbd5e1',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.2em'
+              }}
+            >
+              GMMI CORE ENGINE V3.4.2
+            </Typography>
+          </Box>
+        </Paper>
+      </Box>
     </AuthLayout>
   );
 };
