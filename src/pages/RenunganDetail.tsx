@@ -56,7 +56,7 @@ const RenunganDetail: React.FC = () => {
     );
   }
 
-  const formattedDate = new Date(renungan.tanggal).toLocaleDateString("id-ID", {
+  const formattedDate = new Date(renungan?.tanggal || "").toLocaleDateString("id-ID", {
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -106,7 +106,7 @@ const RenunganDetail: React.FC = () => {
               </div>
 
               <h1 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight mb-8">
-                {renungan.judul}
+                {renungan?.judul}
               </h1>
             </div>
           </motion.div>
@@ -116,7 +116,7 @@ const RenunganDetail: React.FC = () => {
       {/* Content Section */}
       <main className="container mx-auto px-6 -mt-20 relative z-20 pb-24">
         <div className="bg-white rounded-[3rem] shadow-xl shadow-gmmi-navy/5 p-8 md:p-16 max-w-5xl mx-auto border border-white">
-          {renungan.gambar && (
+          {renungan?.gambar && (
             <div className="mb-12 rounded-[2rem] overflow-hidden shadow-lg">
               <Image
                 src={renungan.gambar}
@@ -129,7 +129,7 @@ const RenunganDetail: React.FC = () => {
 
           <article className="prose prose-lg md:prose-xl max-w-none text-slate-600 prose-headings:text-gmmi-navy prose-p:leading-relaxed prose-img:rounded-3xl prose-a:text-gmmi-gold">
             <div className="whitespace-pre-wrap font-serif text-lg md:text-xl leading-8 selection:bg-gmmi-gold/20">
-              {renungan.isi}
+              {renungan?.isi}
             </div>
           </article>
 
