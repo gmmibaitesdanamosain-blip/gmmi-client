@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -14,12 +14,10 @@ import { styled } from '@mui/material/styles';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth';
 
 // Design Tokens
 const NAVY = '#2f3d5f';
 const GOLD = '#D4AF37';
-const TRANSITION_BEZIER = 'cubic-bezier(0.32, 0.72, 0, 1)';
 
 const NavItem = styled(Link)(() => ({
   textDecoration: 'none',
@@ -53,20 +51,12 @@ const menuItems = [
 ];
 
 const Navbar: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
-  const { isAuthenticated } = useAuth();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+
 
   const isActive = (path: string) => location.pathname === path;
 
