@@ -202,7 +202,8 @@ const HeroCarousel: React.FC<{ slides: CarouselSlide[] }> = ({ slides }) => {
                   }}
                   size="lg"
                   radius="full"
-                  className="bg-gmmi-gold text-gmmi-navy font-semibold px-8 py-4 hover:bg-yellow-400 transition-all w-full sm:w-auto"
+                  variant="shadow"
+                  className="bg-gmmi-gold text-gmmi-navy font-bold px-10 py-5 hover:scale-105 transition-all w-full sm:w-auto"
                 >
                   {slides[currentIndex].cta_text || "Pelajari Lebih Lanjut"}
                 </Button>
@@ -624,9 +625,10 @@ const Home: React.FC = () => {
                       transition={{ delay: i * 0.1 }}
                     >
                       <Card
-                        as={Link}
-                        to={`/pewartaan/${item.id}`}
-                        className="relative overflow-hidden group border-none h-[180px] rounded-[2rem] shadow-xl hover:shadow-gmmi-gold/20 transition-all duration-500"
+                        as={motion.div}
+                        whileHover={{ scale: 1.02 }}
+                        className="relative overflow-hidden group border-none h-[180px] rounded-[2.5rem] shadow-xl hover:shadow-gmmi-gold/20 transition-all duration-500 cursor-pointer"
+                        onClick={() => navigate(`/pewartaan/${item.id}`)}
                       >
                         <div className="flex h-full">
                           <div className="w-1/3 bg-gmmi-navy relative overflow-hidden">
@@ -669,9 +671,10 @@ const Home: React.FC = () => {
                   ))
                 ) : (
                   <Card
-                    as={Link}
-                    to="/pewartaan"
-                    className="relative overflow-hidden group border-none h-[280px] rounded-[2.5rem] shadow-2xl hover:shadow-gmmi-gold/20 transition-all duration-500"
+                    as={motion.div}
+                    whileHover={{ scale: 1.02 }}
+                    className="relative overflow-hidden group border-none h-[280px] rounded-[2.5rem] shadow-2xl hover:shadow-gmmi-gold/20 transition-all duration-500 cursor-pointer"
+                    onClick={() => navigate("/pewartaan")}
                   >
                     <div className="absolute inset-0 z-0">
                       <img
@@ -729,7 +732,7 @@ const Home: React.FC = () => {
                       initial="hidden"
                       animate="visible"
                       transition={{ delay: i * 0.05 }}
-                      className="p-6 bg-neutral-50 rounded-3xl border border-neutral-100 flex items-start gap-4 hover:bg-white hover:shadow-lg transition-all"
+                      className="p-6 bg-neutral-50 rounded-[2rem] border border-neutral-100 flex items-start gap-4 hover:bg-white hover:shadow-xl hover:scale-[1.02] transition-all cursor-default"
                     >
                       <div className="w-10 h-10 rounded-full bg-gmmi-gold/10 flex items-center justify-center text-gmmi-gold shrink-0">
                         <Megaphone size={18} />
@@ -751,9 +754,10 @@ const Home: React.FC = () => {
                   ))
                 ) : (
                   <Card
-                    as={Link}
-                    to="/pengumuman"
-                    className="bg-gmmi-navy p-10 rounded-[2.5rem] relative overflow-hidden group hover:shadow-2xl hover:shadow-gmmi-navy/40 transition-all border border-white/5 h-[200px] flex flex-col justify-center"
+                    as={motion.div}
+                    whileHover={{ scale: 1.02 }}
+                    className="bg-gmmi-navy p-10 rounded-[2.5rem] relative overflow-hidden group hover:shadow-2xl hover:shadow-gmmi-navy/40 transition-all border border-white/5 h-[200px] flex flex-col justify-center cursor-pointer"
+                    onClick={() => navigate("/pengumuman")}
                   >
                     <div className="relative z-10 space-y-4">
                       <h4 className="text-2xl font-bold text-white">
@@ -773,9 +777,10 @@ const Home: React.FC = () => {
           <div className="lg:col-span-5 space-y-8">
             <Card
               id="agenda"
-              as={Link}
-              to="/agenda"
-              className="bg-gmmi-navy text-white p-10 rounded-[3rem] relative overflow-hidden min-h-[550px] shadow-2xl shadow-gmmi-navy/40 border border-white/5 group transition-all duration-700 hover:-translate-y-2 flex flex-col justify-between"
+              as={motion.div}
+              whileHover={{ scale: 1.01 }}
+              className="bg-gmmi-navy text-white p-10 rounded-[3rem] relative overflow-hidden min-h-[550px] shadow-2xl shadow-gmmi-navy/40 border border-white/5 group transition-all duration-700 flex flex-col justify-between cursor-pointer"
+              onClick={() => navigate("/agenda")}
             >
               {/* Decorative Background */}
               <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none blur-md group-hover:opacity-20 transition-opacity duration-700">
@@ -854,9 +859,9 @@ const Home: React.FC = () => {
                   <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
                     {renungan
                       ? new Date(renungan.tanggal).toLocaleDateString("id-ID", {
-                          day: "numeric",
-                          month: "long",
-                        })
+                        day: "numeric",
+                        month: "long",
+                      })
                       : "Segera Hadir"}
                   </span>
                   <div className="w-10 h-10 rounded-full bg-gmmi-navy text-white flex items-center justify-center group-hover:bg-gmmi-gold group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gmmi-navy/20">
@@ -899,10 +904,10 @@ const Home: React.FC = () => {
                     <p className="text-3xl font-bold text-white">
                       {financeSummary
                         ? new Intl.NumberFormat("id-ID", {
-                            style: "currency",
-                            currency: "IDR",
-                            maximumFractionDigits: 0,
-                          }).format(financeSummary.balance)
+                          style: "currency",
+                          currency: "IDR",
+                          maximumFractionDigits: 0,
+                        }).format(financeSummary.balance)
                         : "Rp 0"}
                     </p>
                   </div>
@@ -915,10 +920,10 @@ const Home: React.FC = () => {
                       <p className="text-sm font-bold text-white">
                         {financeSummary
                           ? new Intl.NumberFormat("id-ID", {
-                              style: "currency",
-                              currency: "IDR",
-                              maximumFractionDigits: 0,
-                            }).format(financeSummary.totalIncome)
+                            style: "currency",
+                            currency: "IDR",
+                            maximumFractionDigits: 0,
+                          }).format(financeSummary.totalIncome)
                           : "Rp 0"}
                       </p>
                     </div>
@@ -929,11 +934,11 @@ const Home: React.FC = () => {
                       <p className="text-sm font-bold text-white">
                         {financeSummary
                           ? new Intl.NumberFormat("id-ID", {
-                              style: "currency",
-                              currency: "IDR",
-                              currencyDisplay: "symbol",
-                              maximumFractionDigits: 0,
-                            }).format(financeSummary.totalExpense)
+                            style: "currency",
+                            currency: "IDR",
+                            currencyDisplay: "symbol",
+                            maximumFractionDigits: 0,
+                          }).format(financeSummary.totalExpense)
                           : "Rp 0"}
                       </p>
                     </div>
@@ -997,66 +1002,66 @@ const Home: React.FC = () => {
                 <div className="lg:w-1/2 grid grid-cols-1 md:grid-cols-2 gap-4">
                   {loading
                     ? [1, 2, 3, 4].map((i) => (
-                        <Skeleton key={i} className="h-40 rounded-[2rem]" />
-                      ))
+                      <Skeleton key={i} className="h-40 rounded-[2rem]" />
+                    ))
                     : programs.length > 0
                       ? programs.map((prog, i) => (
-                          <div
-                            key={i}
-                            className="p-8 bg-neutral-50 rounded-[2.5rem] border border-neutral-100 group-hover:bg-white group-hover:shadow-xl transition-all duration-500 flex flex-col justify-between"
-                          >
-                            <div>
-                              <div className="text-gmmi-gold mb-4">
-                                {prog.bidang === "Pewartaan" ? (
-                                  <Target size={24} />
-                                ) : prog.bidang === "Pelayanan" ? (
-                                  <Activity size={24} />
-                                ) : (
-                                  <Sparkles size={24} />
-                                )}
-                              </div>
-                              <span className="text-gmmi-navy font-bold text-sm tracking-tight block mb-2">
-                                {prog.nama_program}
-                              </span>
-                              <p className="text-xs text-neutral-500 line-clamp-2">
-                                {prog.jenis_kegiatan}
-                              </p>
-                            </div>
-                            <div className="mt-4 pt-4 border-t border-neutral-100 flex justify-between items-center text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
-                              <span>{prog.waktu_pelaksanaan}</span>
-                            </div>
-                          </div>
-                        ))
-                      : [
-                          {
-                            label: "Pewartaan",
-                            icon: <Target className="w-6 h-6" />,
-                          },
-                          {
-                            label: "Pelayanan",
-                            icon: <Activity className="w-6 h-6" />,
-                          },
-                          {
-                            label: "Persekutuan",
-                            icon: <Users className="w-6 h-6" />,
-                          },
-                          {
-                            label: "Pendidikan",
-                            icon: <BookOpen className="w-6 h-6" />,
-                          },
-                        ].map((item, i) => (
-                          <div
-                            key={i}
-                            className="p-8 bg-neutral-50 rounded-[2.5rem] border border-neutral-100 group-hover:bg-white group-hover:shadow-xl transition-all duration-500"
-                          >
+                        <div
+                          key={i}
+                          className="p-8 bg-neutral-50 rounded-[2.5rem] border border-neutral-100 group-hover:bg-white group-hover:shadow-xl transition-all duration-500 flex flex-col justify-between"
+                        >
+                          <div>
                             <div className="text-gmmi-gold mb-4">
-                              {item.icon}
+                              {prog.bidang === "Pewartaan" ? (
+                                <Target size={24} />
+                              ) : prog.bidang === "Pelayanan" ? (
+                                <Activity size={24} />
+                              ) : (
+                                <Sparkles size={24} />
+                              )}
                             </div>
-                            <span className="text-gmmi-navy font-bold text-sm tracking-tight">
-                              {item.label}
+                            <span className="text-gmmi-navy font-bold text-sm tracking-tight block mb-2">
+                              {prog.nama_program}
                             </span>
+                            <p className="text-xs text-neutral-500 line-clamp-2">
+                              {prog.jenis_kegiatan}
+                            </p>
                           </div>
-                        ))}
+                          <div className="mt-4 pt-4 border-t border-neutral-100 flex justify-between items-center text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
+                            <span>{prog.waktu_pelaksanaan}</span>
+                          </div>
+                        </div>
+                      ))
+                      : [
+                        {
+                          label: "Pewartaan",
+                          icon: <Target className="w-6 h-6" />,
+                        },
+                        {
+                          label: "Pelayanan",
+                          icon: <Activity className="w-6 h-6" />,
+                        },
+                        {
+                          label: "Persekutuan",
+                          icon: <Users className="w-6 h-6" />,
+                        },
+                        {
+                          label: "Pendidikan",
+                          icon: <BookOpen className="w-6 h-6" />,
+                        },
+                      ].map((item, i) => (
+                        <div
+                          key={i}
+                          className="p-8 bg-neutral-50 rounded-[2.5rem] border border-neutral-100 group-hover:bg-white group-hover:shadow-xl transition-all duration-500"
+                        >
+                          <div className="text-gmmi-gold mb-4">
+                            {item.icon}
+                          </div>
+                          <span className="text-gmmi-navy font-bold text-sm tracking-tight">
+                            {item.label}
+                          </span>
+                        </div>
+                      ))}
                 </div>
               </div>
             </Card>

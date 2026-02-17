@@ -80,24 +80,8 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
       </div>
 
       {/* Right Side: Elegant Form Area */}
-      <div className="flex items-center justify-center p-6 md:p-12 lg:p-20 relative z-10">
-        <div className="w-full max-w-md space-y-10">
-          {/* Mobile Header (Hidden on large screens) */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="lg:hidden flex flex-col items-center text-center space-y-4 mb-10"
-          >
-            <div className="bg-gmmi-navy p-4 rounded-3xl shadow-2xl relative">
-              <div className="absolute -inset-2 bg-gmmi-gold/20 rounded-[2rem] blur-xl opacity-50"></div>
-              <img src="/img/LOGO GMMI.png" alt="Logo GMMI" className="w-12 h-12 object-contain relative z-10" />
-            </div>
-            <div>
-              <h2 className="text-3xl font-black text-gmmi-navy tracking-tighter">Portal GMMI</h2>
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Sistem Administrasi Pusat</p>
-            </div>
-          </motion.div>
-
+      <div className="flex items-center justify-center p-6 md:p-12 lg:p-20 relative z-10 bg-white lg:bg-transparent">
+        <div className="w-full max-w-md space-y-12">
           {/* Form Content */}
           <div className="relative">
             {children}
@@ -112,10 +96,10 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
           >
             <Link
               to="/"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white shadow-sm border border-slate-100 text-sm font-bold text-slate-600 hover:text-gmmi-navy hover:shadow-md transition-all duration-300 group"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white shadow-xl border border-slate-100 text-sm font-black text-slate-600 hover:text-gmmi-navy hover:shadow-2xl transition-all duration-500 group"
             >
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              Kembali ke Beranda Utama
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-2 transition-transform" />
+              KEMBALI KE BERANDA
             </Link>
           </motion.div>
         </div>
