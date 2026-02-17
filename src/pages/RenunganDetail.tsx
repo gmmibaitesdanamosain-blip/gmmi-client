@@ -124,7 +124,7 @@ const RenunganDetail: React.FC = () => {
           {renungan.gambar && (
             <div className="mb-12 rounded-[2rem] overflow-hidden shadow-lg">
               <Image
-                src={`${import.meta.env.VITE_API_URL || "http://localhost:3000"}${renungan.gambar}`}
+                src={renungan.gambar}
                 alt={renungan.judul}
                 className="w-full h-auto object-cover max-h-[500px]"
                 width="100%"

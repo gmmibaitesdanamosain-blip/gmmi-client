@@ -51,8 +51,8 @@ const HeroCarousel: React.FC<{ slides: CarouselSlide[] }> = ({ slides }) => {
   const [direction, setDirection] = useState(0);
 
   const renderImageUrl = (url: string) => {
-    if (url.startsWith("/img/")) return url; // Static images
-    return `${import.meta.env.VITE_API_URL || "http://localhost:3000"}${url}`;
+    if (!url) return "/img/Foto gereja.jpg";
+    return url;
   };
 
   const handleNext = () => {
@@ -298,9 +298,7 @@ const SejarahSection: React.FC<{ sejarahList: Sejarah[] }> = ({
 
   const renderImageUrl = (url?: string) => {
     if (!url) return defaultImage;
-    if (url.startsWith("http") || url.startsWith("/img/")) return url;
-    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
-    return `${apiUrl}${url}`;
+    return url;
   };
 
   const year = data?.tanggal_peristiwa
@@ -859,9 +857,9 @@ const Home: React.FC = () => {
                   <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
                     {renungan
                       ? new Date(renungan.tanggal).toLocaleDateString("id-ID", {
-                        day: "numeric",
-                        month: "long",
-                      })
+                          day: "numeric",
+                          month: "long",
+                        })
                       : "Segera Hadir"}
                   </span>
                   <div className="w-10 h-10 rounded-full bg-gmmi-navy text-white flex items-center justify-center group-hover:bg-gmmi-gold group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gmmi-navy/20">
@@ -904,10 +902,10 @@ const Home: React.FC = () => {
                     <p className="text-3xl font-bold text-white">
                       {financeSummary
                         ? new Intl.NumberFormat("id-ID", {
-                          style: "currency",
-                          currency: "IDR",
-                          maximumFractionDigits: 0,
-                        }).format(financeSummary.balance)
+                            style: "currency",
+                            currency: "IDR",
+                            maximumFractionDigits: 0,
+                          }).format(financeSummary.balance)
                         : "Rp 0"}
                     </p>
                   </div>
@@ -920,10 +918,10 @@ const Home: React.FC = () => {
                       <p className="text-sm font-bold text-white">
                         {financeSummary
                           ? new Intl.NumberFormat("id-ID", {
-                            style: "currency",
-                            currency: "IDR",
-                            maximumFractionDigits: 0,
-                          }).format(financeSummary.totalIncome)
+                              style: "currency",
+                              currency: "IDR",
+                              maximumFractionDigits: 0,
+                            }).format(financeSummary.totalIncome)
                           : "Rp 0"}
                       </p>
                     </div>
@@ -934,11 +932,11 @@ const Home: React.FC = () => {
                       <p className="text-sm font-bold text-white">
                         {financeSummary
                           ? new Intl.NumberFormat("id-ID", {
-                            style: "currency",
-                            currency: "IDR",
-                            currencyDisplay: "symbol",
-                            maximumFractionDigits: 0,
-                          }).format(financeSummary.totalExpense)
+                              style: "currency",
+                              currency: "IDR",
+                              currencyDisplay: "symbol",
+                              maximumFractionDigits: 0,
+                            }).format(financeSummary.totalExpense)
                           : "Rp 0"}
                       </p>
                     </div>
@@ -1002,66 +1000,66 @@ const Home: React.FC = () => {
                 <div className="lg:w-1/2 grid grid-cols-1 md:grid-cols-2 gap-4">
                   {loading
                     ? [1, 2, 3, 4].map((i) => (
-                      <Skeleton key={i} className="h-40 rounded-[2rem]" />
-                    ))
+                        <Skeleton key={i} className="h-40 rounded-[2rem]" />
+                      ))
                     : programs.length > 0
                       ? programs.map((prog, i) => (
-                        <div
-                          key={i}
-                          className="p-8 bg-neutral-50 rounded-[2.5rem] border border-neutral-100 group-hover:bg-white group-hover:shadow-xl transition-all duration-500 flex flex-col justify-between"
-                        >
-                          <div>
-                            <div className="text-gmmi-gold mb-4">
-                              {prog.bidang === "Pewartaan" ? (
-                                <Target size={24} />
-                              ) : prog.bidang === "Pelayanan" ? (
-                                <Activity size={24} />
-                              ) : (
-                                <Sparkles size={24} />
-                              )}
+                          <div
+                            key={i}
+                            className="p-8 bg-neutral-50 rounded-[2.5rem] border border-neutral-100 group-hover:bg-white group-hover:shadow-xl transition-all duration-500 flex flex-col justify-between"
+                          >
+                            <div>
+                              <div className="text-gmmi-gold mb-4">
+                                {prog.bidang === "Pewartaan" ? (
+                                  <Target size={24} />
+                                ) : prog.bidang === "Pelayanan" ? (
+                                  <Activity size={24} />
+                                ) : (
+                                  <Sparkles size={24} />
+                                )}
+                              </div>
+                              <span className="text-gmmi-navy font-bold text-sm tracking-tight block mb-2">
+                                {prog.nama_program}
+                              </span>
+                              <p className="text-xs text-neutral-500 line-clamp-2">
+                                {prog.jenis_kegiatan}
+                              </p>
                             </div>
-                            <span className="text-gmmi-navy font-bold text-sm tracking-tight block mb-2">
-                              {prog.nama_program}
-                            </span>
-                            <p className="text-xs text-neutral-500 line-clamp-2">
-                              {prog.jenis_kegiatan}
-                            </p>
+                            <div className="mt-4 pt-4 border-t border-neutral-100 flex justify-between items-center text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
+                              <span>{prog.waktu_pelaksanaan}</span>
+                            </div>
                           </div>
-                          <div className="mt-4 pt-4 border-t border-neutral-100 flex justify-between items-center text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
-                            <span>{prog.waktu_pelaksanaan}</span>
-                          </div>
-                        </div>
-                      ))
+                        ))
                       : [
-                        {
-                          label: "Pewartaan",
-                          icon: <Target className="w-6 h-6" />,
-                        },
-                        {
-                          label: "Pelayanan",
-                          icon: <Activity className="w-6 h-6" />,
-                        },
-                        {
-                          label: "Persekutuan",
-                          icon: <Users className="w-6 h-6" />,
-                        },
-                        {
-                          label: "Pendidikan",
-                          icon: <BookOpen className="w-6 h-6" />,
-                        },
-                      ].map((item, i) => (
-                        <div
-                          key={i}
-                          className="p-8 bg-neutral-50 rounded-[2.5rem] border border-neutral-100 group-hover:bg-white group-hover:shadow-xl transition-all duration-500"
-                        >
-                          <div className="text-gmmi-gold mb-4">
-                            {item.icon}
+                          {
+                            label: "Pewartaan",
+                            icon: <Target className="w-6 h-6" />,
+                          },
+                          {
+                            label: "Pelayanan",
+                            icon: <Activity className="w-6 h-6" />,
+                          },
+                          {
+                            label: "Persekutuan",
+                            icon: <Users className="w-6 h-6" />,
+                          },
+                          {
+                            label: "Pendidikan",
+                            icon: <BookOpen className="w-6 h-6" />,
+                          },
+                        ].map((item, i) => (
+                          <div
+                            key={i}
+                            className="p-8 bg-neutral-50 rounded-[2.5rem] border border-neutral-100 group-hover:bg-white group-hover:shadow-xl transition-all duration-500"
+                          >
+                            <div className="text-gmmi-gold mb-4">
+                              {item.icon}
+                            </div>
+                            <span className="text-gmmi-navy font-bold text-sm tracking-tight">
+                              {item.label}
+                            </span>
                           </div>
-                          <span className="text-gmmi-navy font-bold text-sm tracking-tight">
-                            {item.label}
-                          </span>
-                        </div>
-                      ))}
+                        ))}
                 </div>
               </div>
             </Card>

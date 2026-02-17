@@ -119,7 +119,7 @@ const Renungan: React.FC = () => {
                   <div className="relative h-[240px] overflow-hidden shrink-0">
                     {item.gambar ? (
                       <Image
-                        src={`${import.meta.env.VITE_API_URL || "http://localhost:3000"}${item.gambar}`}
+                        src={item.gambar}
                         alt={item.judul}
                         className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000"
                         radius="none"
