@@ -86,17 +86,17 @@ const Sidebar: React.FC<SidebarProps> = ({ role, isOpen = false, onClose }) => {
         />
       )}
 
-      <aside className={`fixed inset-y-0 left-0 z-50 w-80 h-screen bg-white border-r border-slate-100 px-6 py-8 flex flex-col overflow-y-auto custom-scrollbar transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static shadow-2xl lg:shadow-none ${isOpen ? 'translate-x-0' : '-translate-x-full'
+      <aside className={`fixed inset-y-0 left-0 z-50 w-80 h-screen glass-morphism border-r border-white/20 px-6 py-8 flex flex-col overflow-y-auto custom-scrollbar transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static shadow-2xl lg:shadow-none ${isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}>
         {/* Mobile Header / Close Button */}
         <div className="flex justify-end lg:hidden mb-2">
-          <Button isIconOnly size="sm" variant="light" onPress={onClose}>
+          <Button isIconOnly size="sm" variant="light" radius="full" onPress={onClose}>
             <ChevronRight className="rotate-180" />
           </Button>
         </div>
         {/* Profile Header Redesign - Compact spacing with Dropdown */}
         <div className="flex flex-col mb-8 px-1 flex-shrink-0">
-          <Dropdown placement="bottom-start" className="bg-white/80 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl">
+          <Dropdown placement="bottom-start" className="bg-white/90 backdrop-blur-2xl border border-white/40 shadow-2xl rounded-[2rem]">
             <DropdownTrigger>
               <div className="flex items-center gap-4 cursor-pointer group hover:opacity-80 transition-all">
                 <div className="relative">
@@ -105,7 +105,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role, isOpen = false, onClose }) => {
                     <UserCircle className="w-7 h-7 text-gmmi-gold" />
                   </div>
                 </div>
-                <div className="flex flex-col gap-0">
+                <div className="flex flex-col gap-0 border-none">
                   <p className="text-[9px] font-black text-gmmi-gold uppercase tracking-[0.3em] leading-none">PORTAL AKUN</p>
                   <div className="flex items-center gap-2">
                     <p className="text-lg font-black text-gmmi-navy tracking-tighter">Administrator</p>
@@ -138,49 +138,37 @@ const Sidebar: React.FC<SidebarProps> = ({ role, isOpen = false, onClose }) => {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-
-          <div className="mt-5">
-            <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/40 shadow-sm backdrop-blur-md ${normalizedRole === 'super_admin' ? 'bg-gmmi-gold/10' : 'bg-blue-50'
-              }`}>
-              <div className={`w-1.5 h-1.5 rounded-full ${normalizedRole === 'super_admin' ? 'bg-gmmi-gold animate-pulse' : 'bg-blue-500'
-                }`}></div>
-              <span className={`text-[9px] font-black uppercase tracking-widest ${normalizedRole === 'super_admin' ? 'text-gmmi-gold' : 'text-blue-600'
-                }`}>
-                {normalizedRole === 'super_admin' ? 'Super Admin Authority' : 'Cabang Administrator'}
-              </span>
-            </div>
-          </div>
         </div>
 
-        <div className="px-3 flex items-center gap-3 mb-4 flex-shrink-0">
-          <div className="h-[1px] flex-grow bg-slate-100/50"></div>
+        <div className="px-3 flex items-center gap-3 mb-6 flex-shrink-0">
+          <div className="h-[1px] flex-grow bg-slate-200/50"></div>
           <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.4em] whitespace-nowrap">Navigasi Utama</p>
-          <div className="h-[1px] flex-grow bg-slate-100/50"></div>
+          <div className="h-[1px] flex-grow bg-slate-200/50"></div>
         </div>
 
-        <nav className="flex-grow space-y-2 pr-2">
+        <nav className="flex-grow space-y-3 pr-2">
           {menu.map((item) => {
             const active = isActive(item.path);
             return (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`group relative flex items-center gap-4 py-3 px-4 rounded-2xl transition-all duration-500 outline-none ${active
-                  ? "bg-slate-50 shadow-sm border border-slate-200/60"
-                  : "text-gray-600 hover:bg-gray-50 hover:pl-6"
+                className={`group relative flex items-center gap-4 py-3.5 px-4 rounded-2xl transition-all duration-500 outline-none ${active
+                  ? "bg-white shadow-lg border border-slate-100"
+                  : "text-gray-600 hover:bg-white/50 hover:pl-6"
                   }`}
               >
                 {/* Active Marker */}
                 {active && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-gmmi-gold rounded-r-full shadow-[2px_0_10px_rgba(212,175,55,0.4)]"></div>
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-gmmi-gold rounded-r-full shadow-[2px_0_15px_rgba(212,175,55,0.6)]"></div>
                 )}
 
-                <div className={`p-2 rounded-xl transition-all duration-500 ${active ? "bg-gmmi-navy text-gmmi-gold shadow-lg shadow-gmmi-navy/10" : "bg-gray-100 text-gray-500 group-hover:bg-gmmi-gold group-hover:text-white"
+                <div className={`p-2.5 rounded-xl transition-all duration-500 ${active ? "bg-gmmi-navy text-gmmi-gold shadow-lg shadow-gmmi-navy/20" : "bg-white/50 text-gray-400 group-hover:bg-gmmi-gold group-hover:text-white group-hover:shadow-lg group-hover:shadow-gmmi-gold/20"
                   }`}>
-                  <item.icon className="w-4.5 h-4.5" />
+                  <item.icon className="w-5 h-5" />
                 </div>
 
-                <span className={`font-black text-[13px] uppercase tracking-wider transition-colors duration-300 ${active ? "text-gmmi-navy" : "text-gray-700 group-hover:text-gmmi-navy"
+                <span className={`font-black text-[11px] uppercase tracking-[0.1em] transition-colors duration-300 ${active ? "text-gmmi-navy" : "text-gray-500 group-hover:text-gmmi-navy"
                   }`}>
                   {item.label}
                 </span>
@@ -197,24 +185,22 @@ const Sidebar: React.FC<SidebarProps> = ({ role, isOpen = false, onClose }) => {
         <div className="mt-auto pt-6 space-y-6 flex-shrink-0 pb-6">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-4 group"
+            className="w-full flex items-center gap-4 group px-2"
           >
-            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 group-hover:scale-105 transition-transform duration-300">
+            <div className="w-12 h-12 bg-white/50 rounded-2xl flex items-center justify-center shadow-sm border border-white/40 group-hover:scale-105 group-hover:bg-red-50 group-hover:border-red-100 transition-all duration-300">
               <LogOut className="w-5 h-5 text-slate-400 group-hover:text-red-500 transition-colors" />
             </div>
-            <span className="font-black text-[13px] uppercase tracking-wider text-slate-400 group-hover:text-red-500 transition-colors">Keluar Sesi</span>
+            <span className="font-black text-[12px] uppercase tracking-widest text-slate-400 group-hover:text-red-500 transition-colors">Keluar Sesi</span>
           </button>
 
-          <div className="relative p-6 rounded-3xl bg-white text-gray-800 overflow-hidden group shadow-lg border border-gray-100 transition-all duration-500">
+          <div className="relative p-6 rounded-[2rem] bg-gmmi-navy text-white overflow-hidden group shadow-2xl border border-white/5 transition-all duration-500">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gmmi-gold/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl group-hover:bg-gmmi-gold/20 transition-all duration-700"></div>
             <div className="flex flex-col items-center text-center relative z-10">
-              <div className="w-14 h-14 mb-4 bg-gray-50 rounded-2xl flex items-center justify-center shadow-inner border border-gray-100">
-                <Settings className="w-7 h-7 text-gmmi-gold animate-spin-slow" />
+              <div className="w-12 h-12 mb-4 bg-white/10 rounded-2xl flex items-center justify-center border border-white/20">
+                <Settings className="w-6 h-6 text-gmmi-gold animate-spin-slow" />
               </div>
 
-              <h4 className="text-sm font-black uppercase tracking-widest text-gray-800 mb-2">Butuh Bantuan?</h4>
-              <p className="text-[10px] text-gray-500 font-medium leading-relaxed mb-6 px-4">
-                Hubungi tim developer untuk kendala teknis
-              </p>
+              <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-white mb-2">Butuh Bantuan?</h4>
 
               <Button
                 as="a"
@@ -222,17 +208,11 @@ const Sidebar: React.FC<SidebarProps> = ({ role, isOpen = false, onClose }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 size="md"
-                className="w-full bg-[#6366f1] hover:bg-[#4f46e5] text-white font-bold uppercase text-[10px] tracking-[0.15em] h-12 rounded-xl shadow-[0_5px_15px_rgba(99,102,241,0.3)] transition-all"
+                radius="full"
+                className="w-full bg-gmmi-gold text-gmmi-navy font-black uppercase text-[9px] tracking-[0.2em] h-10 shadow-xl shadow-gmmi-gold/10 hover:scale-105 transition-all mt-4"
               >
-                KONTAK DEVELOPER
+                HUBUNGI DEV
               </Button>
-            </div>
-
-            <div className="flex flex-col items-center pb-4">
-              <div className="flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-slate-50/50 backdrop-blur-md border border-slate-100 shadow-sm">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse"></div>
-                <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Sistem Online</span>
-              </div>
             </div>
           </div>
         </div>

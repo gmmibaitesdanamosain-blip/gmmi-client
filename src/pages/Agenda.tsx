@@ -72,7 +72,7 @@ const AgendaPage: React.FC = () => {
 
             <main className="container mx-auto px-6 -mt-12 relative z-20 pb-24">
                 {/* Search Bar Premium */}
-                <Card className="p-2 rounded-[2rem] shadow-2xl border-none mb-16 max-w-4xl mx-auto">
+                <Card className="p-2 rounded-[2rem] shadow-2xl border-none mb-16 max-w-4xl mx-auto bg-white">
                     <Input
                         isClearable
                         className="w-full"
@@ -84,7 +84,8 @@ const AgendaPage: React.FC = () => {
                         radius="full"
                         variant="flat"
                         classNames={{
-                            inputWrapper: "bg-transparent h-16 text-lg"
+                            inputWrapper: "bg-neutral-100 h-16 text-lg group-data-[focus=true]:bg-white group-data-[focus=true]:border-gmmi-navy transition-all border-2 border-transparent",
+                            input: "text-gmmi-navy placeholder:text-slate-400 font-medium",
                         }}
                     />
                 </Card>

@@ -87,7 +87,7 @@ const ProgramKegiatanPage: React.FC = () => {
 
       <main className="container mx-auto px-6 -mt-16 relative z-20 pb-32">
         {/* Search & Filter */}
-        <Card className="p-3 rounded-[2.5rem] shadow-2xl border-none mb-20 max-w-5xl mx-auto bg-white/80 backdrop-blur-xl">
+        <Card className="p-3 rounded-[2.5rem] shadow-2xl border-none mb-20 max-w-5xl mx-auto bg-white">
           <div className="flex flex-col md:flex-row gap-4">
             <Input
               isClearable
@@ -102,7 +102,8 @@ const ProgramKegiatanPage: React.FC = () => {
               radius="full"
               variant="flat"
               classNames={{
-                inputWrapper: "bg-neutral-50 h-16 text-lg",
+                inputWrapper: "bg-neutral-100 h-16 text-lg group-data-[focus=true]:bg-white group-data-[focus=true]:border-gmmi-navy transition-all border-2 border-transparent",
+                input: "text-gmmi-navy placeholder:text-slate-400 font-medium",
               }}
             />
             <div className="flex items-center gap-4 px-8 bg-neutral-100 rounded-full shrink-0">

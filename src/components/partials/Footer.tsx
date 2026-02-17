@@ -88,7 +88,7 @@ const Footer: React.FC = () => {
                             <div className="shrink-0 w-10 h-10 rounded-xl bg-gmmi-gold/10 flex items-center justify-center text-gmmi-gold">
                                 <MapPin className="w-5 h-5" />
                             </div>
-                            <p className="text-sm text-gray-400">Jl. Mawar Merah No. 12, Jakarta Timur, DKI Jakarta - 12345</p>
+                            <p className="text-sm text-gray-400">Jl. Ikan Kombong, Namosain, Kec. Alak, Kota Kupang, Nusa Tenggara Timur.</p>
                         </div>
                         <div className="flex gap-4">
                             <div className="shrink-0 w-10 h-10 rounded-xl bg-gmmi-gold/10 flex items-center justify-center text-gmmi-gold">

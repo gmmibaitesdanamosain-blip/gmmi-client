@@ -71,7 +71,8 @@ const PengumumanPage: React.FC = () => {
               variant="bordered"
               classNames={{
                 inputWrapper:
-                  "bg-white border-neutral-100 group-hover:border-gmmi-gold/50 transition-colors h-16",
+                  "bg-white border-neutral-100 group-hover:border-gmmi-gold/50 transition-colors h-16 shadow-lg",
+                input: "text-gmmi-navy placeholder:text-slate-400 font-medium",
               }}
             />
           </div>
