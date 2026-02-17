@@ -22,7 +22,9 @@ import {
   Chip,
   Select,
   SelectItem,
+  addToast,
 } from "@heroui/react";
+import SkeletonTable from "../../components/skeleton/SkeletonTable";
 import {
   Plus,
   Trash2,
@@ -39,25 +41,14 @@ import {
   deleteCarouselSlide,
 } from "../../services/carousel.service";
 import type { CarouselSlide } from "../../services/carousel.service";
-
-const CTA_OPTIONS = [
-  { label: "Sesi Pewartaan", value: "#pewartaan" },
-  { label: "Sesi Pengumuman", value: "#pengumuman" },
-  { label: "Sesi Agenda", value: "#agenda" },
-  { label: "Sesi Program", value: "#program" },
-  { label: "Sesi Sejarah", value: "#sejarah" },
-  { label: "Sesi FAQ", value: "#faq" },
-  { label: "Layanan Doa (Scroll)", value: "#contact" },
-  { label: "WhatsApp (Hubungi Langsung)", value: "wa" },
-  { label: "Halaman Agenda Full", value: "/agenda" },
-  { label: "Halaman Pewartaan Full", value: "/pewartaan" },
-  { label: "Beranda", value: "/" },
-  { label: "Custom URL (Manual)", value: "custom" },
-];
+import { CTA_OPTIONS } from "../../constants/options";
+import { Link } from "react-router-dom";
+import LoadingScreen from "../../components/loading-screen";
 
 const CarouselManagement: React.FC = () => {
   const [slides, setSlides] = useState<CarouselSlide[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isSubmit, setIsSubmit] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedSlide, setSelectedSlide] = useState<CarouselSlide | null>(
     null,
@@ -184,14 +175,26 @@ const CarouselManagement: React.FC = () => {
       if (selectedSlide) {
         await updateCarouselSlide(selectedSlide.id, data);
       } else {
+        setIsSubmit(true);
         await createCarouselSlide(data);
       }
       fetchSlides();
+      setIsSubmit(false);
       onClose();
-    } catch (error: any) {
-      console.error("Failed to save slide", error);
-      const errorMessage = error.response?.data?.message || error.message;
-      alert(`Gagal menyimpan slide carousel: ${errorMessage}`);
+      addToast({
+        title: `Slide Carousel berhasil ${selectedSlide ? "diperbarui" : "ditambahkan"}!`,
+        variant: "solid",
+        color: "success",
+      });
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
+
+      addToast({
+        title: `Gagal Menyimpan Slide Carousel ${selectedSlide ? "Update" : "Create"} : ${errorMessage}`,
+        variant: "solid",
+        color: "danger",
+      });
     }
   };
 
@@ -226,81 +229,137 @@ const CarouselManagement: React.FC = () => {
         </Button>
       </div>
 
-      <Card>
-        <CardBody>
-          <Table aria-label="Tabel Carousel">
-            <TableHeader>
-              <TableColumn>GAMBAR</TableColumn>
-              <TableColumn>INFO SLIDE</TableColumn>
-              <TableColumn>URUTAN</TableColumn>
-              <TableColumn>STATUS</TableColumn>
-              <TableColumn>AKSI</TableColumn>
-            </TableHeader>
-            <TableBody
-              emptyContent={"Belum ada slide carousel."}
-              isLoading={loading}
-            >
-              {slides.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>
-                    <Image
-                      src={(item.image_url)}
-                      alt={item.title}
-                      width={120}
-                      className="object-cover rounded-lg aspect-video"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <div className="font-bold text-gmmi-navy">{item.title}</div>
-                    <div className="text-xs text-gray-400 max-w-xs truncate">
-                      {item.subtitle}
-                    </div>
-                    {item.cta_link && (
-                      <div className="flex items-center gap-1 text-[10px] text-blue-500 mt-1">
-                        <ExternalLink size={10} /> {item.cta_text || "Link"}
+      {loading ? (
+        <>
+          <LoadingScreen isLoading={true} />
+
+          <SkeletonTable
+            rows={3}
+            columns={[
+              {
+                key: "gambar",
+                label: "GAMBAR",
+                skeletonWidth: "w-30",
+                skeletonHeight: "h-17",
+                skeletonRounded: "rounded-lg",
+              },
+              {
+                key: "info",
+                label: "INFO SLIDE",
+                lines: [
+                  { width: "w-40", height: "h-4" },
+                  { width: "w-28", height: "h-3" },
+                  { width: "w-16", height: "h-3" },
+                ],
+              },
+              {
+                key: "urutan",
+                label: "URUTAN",
+                skeletonWidth: "w-8",
+                skeletonHeight: "h-6",
+                skeletonRounded: "rounded-full",
+              },
+              {
+                key: "status",
+                label: "STATUS", 
+                skeletonWidth: "w-14",
+                skeletonHeight: "h-6",
+                skeletonRounded: "rounded-full",
+              },
+              {
+                key: "aksi",
+                label: "AKSI",
+                inline: [
+                  { width: "w-8", height: "h-8" },
+                  { width: "w-8", height: "h-8" },
+                ],
+              },
+            ]}
+          />
+        </>
+      ) : (
+        <Card>
+          <CardBody>
+            <Table aria-label="Tabel Carousel">
+              <TableHeader>
+                <TableColumn>GAMBAR</TableColumn>
+                <TableColumn>INFO SLIDE</TableColumn>
+                <TableColumn>URUTAN</TableColumn>
+                <TableColumn>STATUS</TableColumn>
+                <TableColumn>AKSI</TableColumn>
+              </TableHeader>
+              <TableBody emptyContent={"Belum ada slide carousel."}>
+                {slides.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell>
+                      <Image
+                        src={item.image_url}
+                        alt={item.title}
+                        width={120}
+                        className="object-cover rounded-lg aspect-video"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <div className="font-bold text-gmmi-navy">
+                        {item.title}
                       </div>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Chip size="sm" variant="flat">
-                      {item.order_index}
-                    </Chip>
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      size="sm"
-                      color={item.is_active ? "success" : "danger"}
-                      variant="flat"
-                    >
-                      {item.is_active ? "Aktif" : "Nonaktif"}
-                    </Chip>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        isIconOnly
+                      <div className="text-xs text-gray-400 max-w-xs truncate">
+                        {item.subtitle}
+                      </div>
+                      {item.cta_link && (
+                        <div className="flex items-center gap-1 text-[10px] text-blue-500 mt-1">
+                          <Link
+                            to={"/"}
+                            className="flex items-center gap-1"
+                            replace={false}
+                            target="_blank"
+                          >
+                            <ExternalLink size={10} /> {item.cta_text || "Link"}
+                          </Link>
+                        </div>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Chip size="sm" variant="flat">
+                        {item.order_index}
+                      </Chip>
+                    </TableCell>
+                    <TableCell>
+                      <Chip
                         size="sm"
-                        variant="light"
-                        onPress={() => handleEdit(item)}
+                        color={item.is_active ? "success" : "danger"}
+                        variant="flat"
                       >
-                        <Edit size={18} className="text-blue-500" />
-                      </Button>
-                      <Button
-                        isIconOnly
-                        size="sm"
-                        variant="light"
-                        onPress={() => handleDelete(item.id)}
-                      >
-                        <Trash2 size={18} className="text-red-500" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardBody>
-      </Card>
+                        {item.is_active ? "Aktif" : "Nonaktif"}
+                      </Chip>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Button
+                          isIconOnly
+                          size="sm"
+                          variant="light"
+                          onPress={() => handleEdit(item)}
+                        >
+                          <Edit size={18} className="text-blue-500" />
+                        </Button>
+                        <Button
+                          isIconOnly
+                          size="sm"
+                          variant="light"
+                          onPress={() => handleDelete(item.id)}
+                        >
+                          <Trash2 size={18} className="text-red-500" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardBody>
+        </Card>
+      )}
 
       <Modal
         isOpen={isOpen}
@@ -465,6 +524,8 @@ const CarouselManagement: React.FC = () => {
                   color="primary"
                   onPress={() => handleSubmit(onClose)}
                   startContent={<Save size={18} />}
+                  disabled={isSubmit}
+                  isLoading={isSubmit}
                 >
                   Simpan Slide
                 </Button>

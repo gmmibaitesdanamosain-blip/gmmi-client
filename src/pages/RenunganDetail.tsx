@@ -4,7 +4,8 @@ import { getRenunganById } from "../services/renungan.service";
 import Navbar from "../components/partials/Navbar";
 import Footer from "../components/partials/Footer";
 
-import { Button, Image, Spinner } from "@heroui/react";
+import { Button, Image } from "@heroui/react";
+import LoadingScreen from "../components/loading-screen";
 import { ChevronLeft, Calendar, Share2, Clock, Quote } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -38,15 +39,7 @@ const RenunganDetail: React.FC = () => {
     fetchRenungan();
   }, [id]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <Spinner size="lg" color="primary" />
-      </div>
-    );
-  }
-
-  if (!renungan) {
+  if (!renungan && !loading) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
         <Navbar />
@@ -71,6 +64,8 @@ const RenunganDetail: React.FC = () => {
   });
 
   return (
+    <>
+    <LoadingScreen isLoading={loading} />
     <div className="min-h-screen bg-neutral-50/30">
       <Navbar />
 
@@ -157,6 +152,7 @@ const RenunganDetail: React.FC = () => {
       </main>
       <Footer />
     </div>
+    </>
   );
 };
 

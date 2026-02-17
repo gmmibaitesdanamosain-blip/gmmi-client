@@ -17,10 +17,10 @@ import {
   Divider,
   Skeleton,
   Chip,
-  Spinner,
   Accordion,
   AccordionItem,
 } from "@heroui/react";
+import LoadingScreen from "./components/loading-screen";
 import {
   ChevronRight,
   Sparkles,
@@ -574,15 +574,9 @@ const Home: React.FC = () => {
     fetchData();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="h-screen w-full flex items-center justify-center bg-gray-50">
-        <Spinner size="lg" color="primary" />
-      </div>
-    );
-  }
-
   return (
+    <>
+    <LoadingScreen isLoading={loading} />
     <div className="min-h-screen bg-white font-sans">
       <Navbar />
 
@@ -1122,6 +1116,7 @@ const Home: React.FC = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 
