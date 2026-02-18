@@ -1,31 +1,51 @@
 import api from '../utils/axios';
 
 export const getAllPewartaan = async () => {
-    const response = await api.get('/api/pewartaan');
-    return response.data;
+    try {
+        const response = await api.get('/api/pewartaan');
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error.response?.data?.message || 'Gagal mengambil data pewartaan');
+    }
 };
 
-export const getPewartaanById = async (id: number) => {
-    const response = await api.get(`/api/pewartaan/${id}`);
-    return response.data;
+export const getPewartaanById = async (id: string) => {
+    try {
+        const response = await api.get(`/api/pewartaan/${id}`);
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error.response?.data?.message || 'Data pewartaan tidak ditemukan');
+    }
 };
 
 export const createPewartaan = async (data: any) => {
-    const response = await api.post('/api/pewartaan', data);
-    return response.data;
+    try {
+        const response = await api.post('/api/pewartaan', data);
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error.response?.data?.message || 'Gagal membuat pewartaan baru');
+    }
 };
 
-export const updatePewartaan = async (id: number, data: any) => {
-    const response = await api.put(`/api/pewartaan/${id}`, data);
-    return response.data;
+export const updatePewartaan = async (id: string, data: any) => {
+    try {
+        const response = await api.put(`/api/pewartaan/${id}`, data);
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error.response?.data?.message || 'Gagal memperbarui data pewartaan');
+    }
 };
 
-export const deletePewartaan = async (id: number) => {
-    const response = await api.delete(`/api/pewartaan/${id}`);
-    return response.data;
+export const deletePewartaan = async (id: string) => {
+    try {
+        const response = await api.delete(`/api/pewartaan/${id}`);
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error.response?.data?.message || 'Gagal menghapus data pewartaan');
+    }
 };
 
-export const exportPewartaanExcel = async (id: number, judul: string) => {
+export const exportPewartaanExcel = async (id: string, judul: string) => {
     const response = await api.get(`/api/pewartaan/${id}/export/excel`, {
         responseType: 'blob'
     });
@@ -38,7 +58,7 @@ export const exportPewartaanExcel = async (id: number, judul: string) => {
     link.remove();
 };
 
-export const exportPewartaanWord = async (id: number, judul: string) => {
+export const exportPewartaanWord = async (id: string, judul: string) => {
     const response = await api.get(`/api/pewartaan/${id}/export/word`, {
         responseType: 'blob'
     });

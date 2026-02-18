@@ -48,7 +48,7 @@ const BIDANG_OPTIONS = [
 const SuperAdminProgram: React.FC = () => {
   const { user } = useAuth();
   const isSuperAdmin =
-    user?.role === "super_admin" || user?.role === "superadmin";
+    user?.role === "super_admin" || user?.role === "superadmin" || user?.role === "admin_majelis";
   const [programs, setPrograms] = useState<Program[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -506,9 +506,8 @@ const SuperAdminProgram: React.FC = () => {
       {toast.open && (
         <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-4 fade-in">
           <div
-            className={`flex items-center gap-3 px-5 py-3 rounded-xl shadow-lg font-bold text-white ${
-              toast.severity === "success" ? "bg-green-600" : "bg-red-600"
-            }`}
+            className={`flex items-center gap-3 px-5 py-3 rounded-xl shadow-lg font-bold text-white ${toast.severity === "success" ? "bg-green-600" : "bg-red-600"
+              }`}
           >
             <span>{toast.message}</span>
             <button

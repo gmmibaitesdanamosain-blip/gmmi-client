@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
                         </div>
                     </div>
                     <p className="text-gray-400 leading-relaxed font-light">
-                        Gereja Mase Musafir Indonesia — Wadah persekutuan yang berakar pada kasih dan bertumbuh dalam kebenaran Firman Tuhan.
+                        Gereja Masehi Musafir Indonesia — Wadah persekutuan yang berakar pada kasih dan bertumbuh dalam kebenaran Firman Tuhan.
                     </p>
                     <div className="flex gap-4">
                         {[

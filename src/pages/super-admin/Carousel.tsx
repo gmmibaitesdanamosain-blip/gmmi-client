@@ -142,9 +142,20 @@ const CarouselManagement: React.FC = () => {
     if (confirm("Hapus slide carousel ini?")) {
       try {
         await deleteCarouselSlide(id);
-        fetchSlides();
-      } catch (error) {
-        console.error("Failed to delete slide", error);
+        await fetchSlides();
+        addToast({
+          title: "Slide Carousel berhasil dihapus!",
+          variant: "solid",
+          color: "success",
+        });
+      } catch (error: unknown) {
+        const errorMessage =
+          error instanceof Error ? error.message : "An unknown error occurred";
+        addToast({
+          title: `Gagal menghapus Slide Carousel: ${errorMessage}`,
+          variant: "solid",
+          color: "danger",
+        });
       }
     }
   };
@@ -172,13 +183,13 @@ const CarouselManagement: React.FC = () => {
     }
 
     try {
+      setIsSubmit(true);
       if (selectedSlide) {
         await updateCarouselSlide(selectedSlide.id, data);
       } else {
-        setIsSubmit(true);
         await createCarouselSlide(data);
       }
-      fetchSlides();
+      await fetchSlides();
       setIsSubmit(false);
       onClose();
       addToast({

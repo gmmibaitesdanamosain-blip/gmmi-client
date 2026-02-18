@@ -4,7 +4,7 @@ import {
     TableBody, TableRow, TableCell, Modal, ModalContent, ModalHeader,
     ModalBody, ModalFooter, useDisclosure, Select, SelectItem,
     Checkbox, CheckboxGroup, RadioGroup, Radio, Textarea,
-    Chip, Divider, Alert
+    Chip, Divider, Alert, addToast
 } from "@heroui/react";
 import {
     Search, Edit, Trash2, FileSpreadsheet,
@@ -31,7 +31,7 @@ const PEKERJAAN_OPTIONS = [
 
 const JemaatManagement: React.FC = () => {
     const { user } = useAuth();
-    const isSuperAdmin = user?.role === 'super_admin' || user?.role === 'superadmin';
+    const isSuperAdmin = user?.role === 'super_admin' || user?.role === 'superadmin' || user?.role === 'admin_majelis';
     const [jemaatList, setJemaatList] = useState<any[]>([]);
     const [sectors, setSectors] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
@@ -44,6 +44,7 @@ const JemaatManagement: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedJemaat, setSelectedJemaat] = useState<any>(null);
     const [message, setMessage] = useState<{ type: 'success' | 'danger', text: string } | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Form State
     const [formData, setFormData] = useState<any>({
@@ -76,9 +77,20 @@ const JemaatManagement: React.FC = () => {
         setLoading(true);
         try {
             const res = await getAllJemaat({ ...filters, search: searchTerm });
-            if (res.success) setJemaatList(res.data);
-        } catch (error) {
+            if (res.success && res.data) {
+                setJemaatList(Array.isArray(res.data) ? res.data : []);
+            } else if (res.data) {
+                // If backend returns data directly without success flag (old style)
+                setJemaatList(Array.isArray(res.data) ? res.data : []);
+            } else {
+                setJemaatList([]);
+            }
+        } catch (error: any) {
             console.error("Failed to fetch jemaat", error);
+            addToast({
+                title: error.message || 'Gagal mengambil data jemaat',
+                color: 'danger'
+            });
         } finally {
             setLoading(false);
         }
@@ -91,7 +103,7 @@ const JemaatManagement: React.FC = () => {
                 setSectors(res.data);
             } else {
                 const fallbackSectors = Array.from({ length: 7 }, (_, i) => ({
-                    id: `00000000-0000-4000-a000-00000000000${i + 1}`,
+                    id: `sektor${i + 1}`,
                     nama_sektor: `Sektor ${i + 1}`,
                     alamat: '-',
                     no_hp: '-'
@@ -101,7 +113,7 @@ const JemaatManagement: React.FC = () => {
         } catch (error) {
             console.error("Failed to fetch sectors", error);
             const fallbackSectors = Array.from({ length: 7 }, (_, i) => ({
-                id: `00000000-0000-4000-a000-00000000000${i + 1}`,
+                id: `sektor${i + 1}`,
                 nama_sektor: `Sektor ${i + 1}`,
                 alamat: '-',
                 no_hp: '-'
@@ -114,20 +126,24 @@ const JemaatManagement: React.FC = () => {
         if (jemaat) {
             setSelectedJemaat(jemaat);
             setFormData({
-                nama: jemaat.nama,
-                sektor_id: jemaat.sektor_id,
-                pendidikan_terakhir: jemaat.pendidikan_terakhir,
+                nama: jemaat.nama || '',
+                sektor_id: jemaat.sektor_id || '',
+                pendidikan_terakhir: jemaat.pendidikan_terakhir || 'SMA',
                 pekerjaan: jemaat.pekerjaan || '',
-                kategorial: jemaat.kategorial ? jemaat.kategorial.split(',') : [],
+                kategorial: (typeof jemaat.kategorial === 'string' && jemaat.kategorial)
+                    ? jemaat.kategorial.split(',')
+                    : (Array.isArray(jemaat.kategorial) ? jemaat.kategorial : []),
                 keterangan: jemaat.keterangan || '',
                 jenis_kelamin: jemaat.jenis_kelamin || 'L',
                 tempat_lahir: jemaat.tempat_lahir || '',
-                tanggal_lahir: jemaat.tanggal_lahir ? jemaat.tanggal_lahir.split('T')[0] : '',
+                tanggal_lahir: (jemaat.tanggal_lahir && typeof jemaat.tanggal_lahir === 'string')
+                    ? jemaat.tanggal_lahir.split('T')[0]
+                    : '',
                 sakramen: {
-                    bpts: jemaat.bpts,
-                    sidi: jemaat.sidi,
-                    nikah: jemaat.nikah,
-                    meninggal: jemaat.meninggal
+                    bpts: !!jemaat.bpts,
+                    sidi: !!jemaat.sidi,
+                    nikah: !!jemaat.nikah,
+                    meninggal: !!jemaat.meninggal
                 }
             });
         } else {
@@ -154,18 +170,22 @@ const JemaatManagement: React.FC = () => {
     };
 
     const handleSubmit = async () => {
+        // Validation
+        if (!formData.nama || formData.nama.trim() === '') {
+            addToast({ title: 'Nama wajib diisi', color: 'danger' });
+            return;
+        }
+        if (!formData.sektor_id) {
+            addToast({ title: 'Sektor wajib dipilih', color: 'danger' });
+            return;
+        }
+        if (!formData.pekerjaan || formData.pekerjaan.trim() === '') {
+            addToast({ title: 'Pekerjaan wajib diisi', color: 'danger' });
+            return;
+        }
+
+        setIsSubmitting(true);
         try {
-            // Validasi frontend
-            if (!formData.pekerjaan || formData.pekerjaan.trim() === '') {
-                setMessage({ type: 'danger', text: 'Pekerjaan wajib diisi.' });
-                return;
-            }
-
-            if (!PEKERJAAN_OPTIONS.includes(formData.pekerjaan)) {
-                setMessage({ type: 'danger', text: 'Pekerjaan tidak valid. Pilih dari daftar yang tersedia.' });
-                return;
-            }
-
             const dataToSubmit = {
                 ...formData,
                 kategorial: formData.kategorial.join(',')
@@ -173,17 +193,20 @@ const JemaatManagement: React.FC = () => {
 
             if (selectedJemaat) {
                 await updateJemaat(selectedJemaat.id, dataToSubmit);
-                setMessage({ type: 'success', text: 'Data jemaat berhasil diperbarui.' });
+                addToast({ title: 'Data jemaat berhasil diperbarui', color: 'success' });
             } else {
                 await createJemaat(dataToSubmit);
-                setMessage({ type: 'success', text: 'Data jemaat berhasil ditambahkan.' });
+                addToast({ title: 'Data jemaat berhasil ditambahkan', color: 'success' });
             }
             fetchData();
             onClose();
         } catch (error: any) {
             console.error("Save error", error);
-            const errorMsg = error.response?.data?.error || 'Gagal menyimpan data jemaat.';
+            const errorMsg = error.message || 'Gagal menyimpan data jemaat.';
+            addToast({ title: errorMsg, color: 'danger' });
             setMessage({ type: 'danger', text: errorMsg });
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -191,10 +214,10 @@ const JemaatManagement: React.FC = () => {
         if (window.confirm('Hapus data jemaat ini?')) {
             try {
                 await deleteJemaat(id);
-                setMessage({ type: 'success', text: 'Data jemaat berhasil dihapus.' });
+                addToast({ title: 'Data jemaat berhasil dihapus', color: 'success' });
                 fetchData();
-            } catch (error) {
-                setMessage({ type: 'danger', text: 'Gagal menghapus data jemaat.' });
+            } catch (error: any) {
+                addToast({ title: error.message || 'Gagal menghapus data jemaat', color: 'danger' });
             }
         }
     };
@@ -567,9 +590,11 @@ const JemaatManagement: React.FC = () => {
                             color="primary"
                             className="bg-gmmi-navy text-white font-black uppercase tracking-widest px-8 shadow-xl shadow-gmmi-navy/20"
                             onPress={handleSubmit}
-                            startContent={<Save size={18} />}
+                            isLoading={isSubmitting}
+                            isDisabled={isSubmitting}
+                            startContent={!isSubmitting && <Save size={18} />}
                         >
-                            Simpan Data
+                            {isSubmitting ? 'Menyimpan...' : 'Simpan Data'}
                         </Button>
                     </ModalFooter>
                 </ModalContent>

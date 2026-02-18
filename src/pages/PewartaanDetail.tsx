@@ -27,11 +27,11 @@ const PewartaanDetail: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      fetchDetail(parseInt(id));
+      fetchDetail(id);
     }
   }, [id]);
 
-  const fetchDetail = async (wartaId: number) => {
+  const fetchDetail = async (wartaId: string) => {
     try {
       const res = await getPewartaanById(wartaId);
       if (res.success) {

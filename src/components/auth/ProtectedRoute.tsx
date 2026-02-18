@@ -27,7 +27,7 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
         const roles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
         if (!user || !roles.includes(user.role)) {
             // Redirect to appropriate dashboard if role is not allowed
-            const isSuperAdmin = ['super_admin', 'superadmin', 'Super Admin'].includes(user?.role || '');
+            const isSuperAdmin = ['super_admin', 'superadmin', 'Super Admin', 'admin_majelis'].includes(user?.role || '');
             const redirectPath = isSuperAdmin ? '/super-admin' : '/admin';
             return <Navigate to={redirectPath} replace />;
         }

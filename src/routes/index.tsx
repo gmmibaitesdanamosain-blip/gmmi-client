@@ -80,7 +80,7 @@ const AppRoutes = () => {
       <Route
         path="/super-admin"
         element={
-          <ProtectedRoute requiredRole="super_admin">
+          <ProtectedRoute requiredRole={["super_admin", "admin_majelis"]}>
             <SuperAdminLayout />
           </ProtectedRoute>
         }

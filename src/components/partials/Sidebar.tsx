@@ -66,7 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role, isOpen = false, onClose }) => {
     if (onClose) onClose();
   }, [location.pathname]);
 
-  const normalizedRole = role === 'super_admin' ? 'super_admin' : (role === 'superadmin' ? 'super_admin' : 'admin');
+  const normalizedRole = ['super_admin', 'superadmin', 'admin_majelis'].includes(role) ? 'super_admin' : 'admin';
   const menu = normalizedRole === 'super_admin' ? superAdminMenu : adminMenu;
 
   const isActive = (path: string) => location.pathname === path;

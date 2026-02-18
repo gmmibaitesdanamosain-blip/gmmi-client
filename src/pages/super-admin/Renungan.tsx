@@ -81,7 +81,7 @@ const Renungan: React.FC = () => {
     onOpen();
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: any) => {
     if (confirm("Hapus renungan ini?")) {
       try {
         await deleteRenungan(id);

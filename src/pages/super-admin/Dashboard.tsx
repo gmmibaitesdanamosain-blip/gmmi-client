@@ -86,7 +86,7 @@ const Dashboard: React.FC = () => {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-          {user?.role?.includes("super") && (
+          {['super_admin', 'superadmin', 'admin_majelis'].some(r => user?.role?.includes(r)) && (
             <Button
               as={Link}
               to="/super-admin/keuangan"
@@ -594,10 +594,10 @@ const Dashboard: React.FC = () => {
                 })()}
                 {(!stats.educationStats ||
                   stats.educationStats.length === 0) && (
-                  <p className="text-center text-gray-400 py-4 italic">
-                    Belum ada data persebaran jemaat.
-                  </p>
-                )}
+                    <p className="text-center text-gray-400 py-4 italic">
+                      Belum ada data persebaran jemaat.
+                    </p>
+                  )}
               </div>
             </CardBody>
           </Card>
@@ -699,7 +699,7 @@ const Dashboard: React.FC = () => {
             Ringkasan Keuangan
           </h3>
           <div className="flex gap-2">
-            {user?.role?.includes("super") && (
+            {['super_admin', 'superadmin', 'admin_majelis', 'Super Admin'].includes(user?.role || '') && (
               <>
                 <Button
                   color="success"
@@ -874,17 +874,16 @@ const Dashboard: React.FC = () => {
                     className="p-4 hover:bg-gray-50 transition-colors flex items-center gap-4 border-l-4 border-transparent hover:border-gmmi-navy/30"
                   >
                     <div
-                      className={`p-2.5 rounded-xl shadow-sm ${
-                        activity.type === "keuangan"
-                          ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
-                          : activity.type === "jemaat"
-                            ? "bg-blue-50 text-blue-600 border border-blue-100"
-                            : activity.type === "program"
-                              ? "bg-amber-50 text-amber-600 border border-amber-100"
-                              : activity.type === "admin"
-                                ? "bg-indigo-50 text-indigo-600 border border-indigo-100"
-                                : "bg-slate-50 text-slate-600 border border-slate-100"
-                      }`}
+                      className={`p-2.5 rounded-xl shadow-sm ${activity.type === "keuangan"
+                        ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                        : activity.type === "jemaat"
+                          ? "bg-blue-50 text-blue-600 border border-blue-100"
+                          : activity.type === "program"
+                            ? "bg-amber-50 text-amber-600 border border-amber-100"
+                            : activity.type === "admin"
+                              ? "bg-indigo-50 text-indigo-600 border border-indigo-100"
+                              : "bg-slate-50 text-slate-600 border border-slate-100"
+                        }`}
                     >
                       {activity.type === "keuangan" ? (
                         <TrendingUp size={18} />

@@ -27,7 +27,7 @@ import { useAuth } from '../../hooks/useAuth';
 
 const Keuangan: React.FC = () => {
     const { user } = useAuth();
-    const isSuperAdmin = user?.role === 'super_admin' || user?.role === 'superadmin';
+    const isSuperAdmin = user?.role === 'super_admin' || user?.role === 'superadmin' || user?.role === 'admin_majelis';
     // State management
     const [transactions, setTransactions] = useState<any[]>([]);
     const [summary, setSummary] = useState<any>(null);

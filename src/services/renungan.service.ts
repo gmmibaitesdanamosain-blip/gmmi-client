@@ -6,7 +6,7 @@ export const getAllRenungan = async () => {
     return response.data;
 };
 
-export const getRenunganById = async (id: number) => {
+export const getRenunganById = async (id: string) => {
     const response = await apiService.get(`/api/renungan/${id}`);
     return response.data;
 };
@@ -20,7 +20,7 @@ export const createRenungan = async (data: FormData) => {
     return response.data;
 };
 
-export const updateRenungan = async (id: number, data: FormData) => {
+export const updateRenungan = async (id: string, data: FormData) => {
     const response = await apiService.put(`/api/renungan/${id}`, data, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -29,7 +29,7 @@ export const updateRenungan = async (id: number, data: FormData) => {
     return response.data;
 };
 
-export const deleteRenungan = async (id: number) => {
+export const deleteRenungan = async (id: string) => {
     const response = await apiService.delete(`/api/renungan/${id}`);
     return response.data;
 };
